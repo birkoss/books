@@ -8,36 +8,35 @@
 		<a href="{% url 'library/add' %}" class="btn btn-primary btn-sm">Créer</a>
 	</div>
 
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th scope="col">#</th>
-				<th scope="col">First</th>
-				<th scope="col">Last</th>
-				<th scope="col">Handle</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<th scope="row">1</th>
-				<td>Mark</td>
-				<td>Otto</td>
-				<td>@mdo</td>
-			</tr>
-			<tr>
-				<th scope="row">2</th>
-				<td>Jacob</td>
-				<td>Thornton</td>
-				<td>@fat</td>
-			</tr>
-			<tr>
-				<th scope="row">3</th>
-				<td>Larry</td>
-				<td>the Bird</td>
-				<td>@twitter</td>
-			</tr>
-		</tbody>
-	</table>
+	{% if libraries %}
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th scope="col">Nom</th>
+					<th scope="col">Status</th>
+					<th scope="col">Catégories</th>
+					<th scope="col">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for library in libraries %}
+				<tr>
+					<td>{{ library.name }}</td>
+					<td>{% if library.active %}<span class="badge badge-success">publiée</span>{% else %}<span class="badge badge-warning">non-publiée</span>{% endif %}</td>
+					<td>{{ library.category.count }}</td>
+					<td>
+						<a href="{% url 'library/edit' library.id %}">Modifier</a> &nbsp;&nbsp;
+						<a href="{% url 'library/edit' library.id %}">Voir</a>
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% else %}
+		<div class="alert alert-warning" role="alert">
+			Vous n'avez aucune bibiothèque. Créer une <a href="{% url 'library/add' %}">nouvelle bibliothèque</a>.
+		</div>
+	{% endif %}
 
 </div>
 

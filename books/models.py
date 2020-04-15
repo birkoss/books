@@ -23,6 +23,7 @@ class Library(models.Model):
 	slug = models.CharField(max_length=8, blank=True, default='')
 	template = models.ForeignKey(LibraryTemplate, blank=True, null=True, on_delete=models.PROTECT)
 	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.PROTECT)
+	active = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.name + " - " + self.user.username

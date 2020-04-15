@@ -7,7 +7,7 @@ from base import views as base_views
 
 urlpatterns = [
     path('', base_views.home, name='library/archive'),
-    path('libraries/add', base_views.home, name='library/add'),
-    path('libraries/edit/<str:library_id>', base_views.home, name='library/edit'),
+    path('libraries/add', books_views.add_library, name='library/add'),
+    path('libraries/edit/<str:library_id>', books_views.edit_library, name='library/edit'),
     path('admin/', admin.site.urls),
 ]
