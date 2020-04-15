@@ -1,0 +1,18 @@
+{% extends 'base/template.html' %}
+
+{% block navigation_wrapper %}
+	{% with navigation=True %}
+		{{ block.super }}
+	{% endwith%}
+{% endblock %}
+
+{% block base %}
+<div id="content" class="base">
+	<main>
+		{% block content %}{% endblock %}
+	</main>
+</div>
+<div id="footer">
+	{% include "base/footer.html" %}
+</div>
+{% endblock %}

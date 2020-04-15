@@ -1,0 +1,17 @@
+{% extends 'base/base_full.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<img class="mb-4" src="{% static 'base/medias/logo.png' %}" alt="" width="100" height="100">
+
+<h1 class="h4 mb-3 font-weight-normal">Se connecter avec</h1>
+
+<button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Google</button>
+
+<button class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit"><i class="fab fa-facebook-f mr-2"></i> Facebook</button>
+
+<p class="mt-5 mb-3 text-muted">&copy; 2020</p>
+
+{% endblock %}

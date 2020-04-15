@@ -1,0 +1,43 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: #f5f5f5;
+}
+
+#content.base {
+	padding-top: 30px;
+}
+
+/* Base Full Template */
+
+#content.base-full {
+	display: flex;
+	height: 100%;
+	align-items: center;
+	justify-content: center;
+}
+#content.base-full > main {
+	max-width: 300px;
+	width: 100%;
+	text-align: center;
+}
+#content.base-full > main .btn {
+	font-size: 80%;
+    border-radius: 5rem;
+    letter-spacing: .1rem;
+    font-weight: bold;
+    padding: 1rem;
+    transition: all 0.2s;
+}
+#content.base-full > main .btn.btn-google {
+    color: white;
+    background-color: #ea4335;
+}
+
+#content.base-full > main .btn.btn-facebook {
+    color: white;
+    background-color: #3b5998;
+}
