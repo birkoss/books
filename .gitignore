@@ -1,0 +1,12 @@
+*.sqlite3
+._*
+.DS_Store
+
+__pycache__/
+tmp/
+passenger_wsgi.py
+project/config.py
+stderr.log
+
+media/
+medias/
