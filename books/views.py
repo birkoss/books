@@ -1,11 +1,18 @@
+import os
+import shutil
+
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404, render, redirect, reverse
+from django.utils.text import slugify
+
+from imagekit.utils import get_cache
+
+from project.config import MEDIA_ROOT, MEDIA_URL
 
 from .forms import BookForm, LibraryForm, LibraryCategoryForm
 from .models import Book, Library, LibraryCategory
-
 
 def library_single(request, library_slug):
 	library = get_object_or_404(Library, slug=library_slug)
@@ -34,23 +41,29 @@ def edit_book(request, library_id, category_id, book_id):
 		if form.is_valid():
 			print( request.FILES.getlist('cover') )
 			# Check if there are posted images.
-			if request.FILES.getlist('cover'):	
-				# Define the location where we will be uploading our file(s)
-				# We'll use the format ecommerce/media/products/PRODUCT_ID to group images by product.
+			if request.FILES.getlist('cover'):
+
+				if book.cover:
+					(image_folder, image_extension) = os.path.splitext(book.cover.url)
+					image_folder = MEDIA_ROOT + "/CACHE/images/" + image_folder.replace(MEDIA_URL, "")
+					try:
+						shutil.rmtree(image_folder)
+					except FileNotFoundError:
+						pass
+
+					book.cover.delete()
+
+
 				book_medias_path = 'books/' + str(book.id)
-				
-				# Loop through each posted image file
+
 				for post_file in request.FILES.getlist('cover'):
-					# Create an instance of FileSystemStorage class using a custom upload location as indicated in the parameter.
-					fs = FileSystemStorage(location="medias/" + book_medias_path)
-					# Save the file(s) to the specified location
-					filename = fs.save(post_file.name, post_file)
-					# Build the URL location of our image. 
-					uploaded_file_url = book_medias_path + '/' + filename
+					fs = FileSystemStorage(location=MEDIA_ROOT + "/" + book_medias_path)
 
-					# Save the image to our database.
+					(image_filename, image_extension) = os.path.splitext(post_file.name)
 
-					book.cover = uploaded_file_url
+					filename = fs.save(slugify(image_filename)+image_extension, post_file)
+
+					book.cover = book_medias_path + '/' + filename
 
 			book.name = form.cleaned_data['name']
 			book.save()
