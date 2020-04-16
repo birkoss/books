@@ -43,7 +43,9 @@ def edit_book(request, library_id, category_id, book_id):
 			# Check if there are posted images.
 			if request.FILES.getlist('cover'):
 
+				# If a cover image is already there ?
 				if book.cover:
+					# Delete the imagekit CACHE folder
 					(image_folder, image_extension) = os.path.splitext(book.cover.url)
 					image_folder = MEDIA_ROOT + "/CACHE/images/" + image_folder.replace(MEDIA_URL, "")
 					try:
@@ -51,16 +53,15 @@ def edit_book(request, library_id, category_id, book_id):
 					except FileNotFoundError:
 						pass
 
+					# Delete the book cover
 					book.cover.delete()
 
-
+				# Save the new Book cover
 				book_medias_path = 'books/' + str(book.id)
-
 				for post_file in request.FILES.getlist('cover'):
-					fs = FileSystemStorage(location=MEDIA_ROOT + "/" + book_medias_path)
-
 					(image_filename, image_extension) = os.path.splitext(post_file.name)
 
+					fs = FileSystemStorage(location=MEDIA_ROOT + "/" + book_medias_path)
 					filename = fs.save(slugify(image_filename)+image_extension, post_file)
 
 					book.cover = book_medias_path + '/' + filename
