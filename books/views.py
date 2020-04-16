@@ -11,17 +11,39 @@ from django.utils.text import slugify
 from imagekit.utils import get_cache
 
 from project.config import MEDIA_ROOT, MEDIA_URL
+from project.utils import get_existing_image
 
 from .forms import BookForm, LibraryForm, LibraryCategoryForm
 from .models import Book, Library, LibraryCategory
 
+
 def library_single(request, library_slug):
 	library = get_object_or_404(Library, slug=library_slug)
 
+	categories = []
+
 	# @TODO Verify that this library is active
+
+	for single_category in library.librarycategory_set.all():
+		category = {
+			'name': single_category.name,
+			'books': []
+		}
+		for single_book in single_category.book_set.all():
+			cover_image = get_existing_image(single_book.cover)
+
+			if cover_image:
+				category['books'].append({
+					'name': single_book.name,
+					'cover_image': cover_image
+				})
+
+		if category['books']:
+			categories.append(category)
 	
 	return render(request, 'book/single.html', {
-		'library': library
+		'library': library,
+		'categories': categories
 	})
 
 
@@ -36,12 +58,7 @@ def edit_book(request, library_id, category_id, book_id):
 	
 	book = get_object_or_404(Book, pk=book_id)
 
-	book_cover_image = ""
-	if book.cover:
-		book_cover_filename = MEDIA_ROOT + "/" + book.cover.url.replace(MEDIA_URL, "")
-		if os.path.isfile(book_cover_filename):
-			book_cover_image = book.cover
-
+	book_cover_image = get_existing_image(book.cover)
 
 	if request.method == "POST":
 		form = BookForm(request.POST)

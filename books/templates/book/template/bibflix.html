@@ -34,14 +34,14 @@
 
 		<section class="main-container">
 
-			{% for category in library.librarycategory_set.all %}
+			{% for category in categories %}
 
 				<div class="location" id="home">
 					<h1 id="home">{{ category.name }}</h1>
 					<div class="box">
-						{% for book in category.book_set.all %}
-							{% if book.cover %}
-								<a target="_blank" href="#">{% thumbnail '400x550' book.cover %}</a>
+						{% for book in category.books %}
+							{% if book.cover_image %}
+								<a target="_blank" href="#">{% thumbnail '400x550' book.cover_image %}</a>
 							{% endif %}
 						{% endfor %}
 					</div>
