@@ -55,6 +55,7 @@ class LibraryCategory(models.Model):
 
 class Book(models.Model):
 	name = models.CharField(max_length=200, default='')
+	url = models.CharField(max_length=300, default='')
 	category = models.ForeignKey(LibraryCategory, blank=True, null=True, on_delete=models.PROTECT)
 	cover = models.ImageField(null=True)
 

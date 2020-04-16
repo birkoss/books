@@ -35,6 +35,7 @@ def library_single(request, library_slug):
 			if cover_image:
 				category['books'].append({
 					'name': single_book.name,
+					'url': single_book.url,
 					'cover_image': cover_image
 				})
 
@@ -64,7 +65,6 @@ def edit_book(request, library_id, category_id, book_id):
 		form = BookForm(request.POST)
 
 		if form.is_valid():
-			print( request.FILES.getlist('cover') )
 			# Check if there are posted images.
 			if request.FILES.getlist('cover'):
 
@@ -92,12 +92,14 @@ def edit_book(request, library_id, category_id, book_id):
 					book.cover = book_medias_path + '/' + filename
 
 			book.name = form.cleaned_data['name']
+			book.url = form.cleaned_data['url']
 			book.save()
 
 			return redirect(reverse('library-category-book/edit', args=[library.id, category.id, book.id]) + "?status=updated")
 	else:
 		form = BookForm({
-			'name': book.name
+			'name': book.name,
+			'url': book.url,
 		})
 
 	return render(request, 'book/book/edit.html', {
@@ -124,6 +126,7 @@ def add_book(request, library_id, category_id):
 		if form.is_valid():
 			book = Book(
 				name = form.cleaned_data['name'], 
+				url = form.cleaned_data['url'], 
 				category = category
 			)
 			book.save()
