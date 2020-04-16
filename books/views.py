@@ -2,8 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, render, redirect, reverse
 
-from .forms import LibraryForm, LibraryCategoryForm
-from .models import Library, LibraryCategory
+from .forms import BookForm, LibraryForm, LibraryCategoryForm
+from .models import Book, Library, LibraryCategory
 
 
 def library_single(request, library_slug):
@@ -11,6 +11,37 @@ def library_single(request, library_slug):
 	
 	return render(request, 'book/single.html', {
 		'library': library
+	})
+
+
+@login_required
+def edit_book(request, library_id, category_id, book_id):
+	library = get_object_or_404(Library, pk=library_id)
+
+	if library.user != request.user:
+		return redirect('library/archive')
+
+	category = get_object_or_404(LibraryCategory, pk=category_id)
+	
+	book = get_object_or_404(Book, pk=book_id)
+
+	if request.method == "POST":
+		form = BookForm(request.POST)
+
+		if form.is_valid():
+			book.name = form.cleaned_data['name']
+			book.save()
+
+			return redirect(reverse('library-category-book/edit', args=[library.id, category.id, book.id]) + "?status=updated")
+	else:
+		form = BookForm({
+			'name': book.name
+		})
+
+	return render(request, 'book/book/edit.html', {
+		'form': form,
+		'library': library,
+		'category': category,
 	})
 
 
@@ -24,18 +55,18 @@ def add_book(request, library_id, category_id):
 	category = get_object_or_404(LibraryCategory, pk=category_id)
 
 	if request.method == "POST":
-		form = LibraryCategoryForm(request.POST)
+		form = BookForm(request.POST)
 
 		if form.is_valid():
-			category = LibraryCategory(
+			book = Book(
 				name = form.cleaned_data['name'], 
-				library = library
+				category = category
 			)
-			category.save()
+			book.save()
 
-			return redirect(reverse('library-category/edit', args=[library.id, category.id]) + "?status=created")
+			return redirect(reverse('library-category-book/edit', args=[library.id, category.id, book.id]) + "?status=created")
 	else:
-		form = LibraryCategoryForm()
+		form = BookForm()
 
 	return render(request, 'book/book/add.html', {
 		'form': form,

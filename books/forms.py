@@ -25,3 +25,9 @@ class LibraryCategoryForm(forms.Form):
 	error_css_class = "alert alert-danger"
 
 	name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+
+
+class BookForm(forms.Form):
+	error_css_class = "alert alert-danger"
+
+	name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
