@@ -32,3 +32,28 @@ class Library(models.Model):
 		if not self.slug.strip():
 			self.slug = md5ify_model(self.__class__)
 		super().save(args, kwargs)
+
+
+class LibraryCategory(models.Model):
+	name = models.CharField(max_length=200, default='')
+	library = models.ForeignKey(Library, blank=True, null=True, on_delete=models.PROTECT)
+	active = models.BooleanField(default=False)
+	order = models.IntegerField(default=0, null=True)
+
+	def __str__(self):
+		return self.name + " - " + self.library.name
+
+	def save(self, *args, **kwargs):
+		if self.order == 0:
+			 category = LibraryCategory.objects.filter(library=self.library).order_by("-order").first()
+			 if category is not None:
+			 	self.order = category.order + 1
+			 else:
+			 	self.order = 1
+		super().save(args, kwargs)
+
+
+class Book(models.Model):
+	name = models.CharField(max_length=200, default='')
+	category = models.ForeignKey(LibraryCategory, blank=True, null=True, on_delete=models.PROTECT)
+

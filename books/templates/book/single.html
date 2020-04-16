@@ -1,0 +1,17 @@
+{% extends 'book/template/'|add:library.template.slug|add:'.html' %}
+
+{% block content %}
+
+<h1>{{ library.name }}</h1>
+
+{% for category in library.librarycategory_set.all %}
+
+	<h2>{{ category.name }}</h2>
+
+	{% for book in category.book_set.all %}
+		<h3>{{ book.name }}</h3>
+	{% endfor %}
+
+{% endfor %}
+
+{% endblock %}

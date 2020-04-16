@@ -10,8 +10,8 @@
 	{% endif %}
 
 	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-		<h1 class="h2">Modifier une bibliothèque existante</h1>
-		<a href="{% url 'library/archive' %}" class="btn btn-outline-secondary btn-sm">Annuler</a>
+		<h1 class="h2">Modifier une catégorie existante</h1>
+		<a href="{% url 'library-category/archive' library.id %}" class="btn btn-outline-secondary btn-sm">Annuler</a>
 	</div>
 
 	<form action="" method="post">

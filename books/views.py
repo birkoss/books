@@ -2,8 +2,130 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, render, redirect, reverse
 
-from .forms import LibraryForm
-from .models import Library
+from .forms import LibraryForm, LibraryCategoryForm
+from .models import Library, LibraryCategory
+
+
+def library_single(request, library_slug):
+	library = get_object_or_404(Library, slug=library_slug)
+	
+	return render(request, 'book/single.html', {
+		'library': library
+	})
+
+
+@login_required
+def add_book(request, library_id, category_id):
+	library = get_object_or_404(Library, pk=library_id)
+
+	if library.user != request.user:
+		return redirect('library/archive')
+
+	category = get_object_or_404(LibraryCategory, pk=category_id)
+
+	if request.method == "POST":
+		form = LibraryCategoryForm(request.POST)
+
+		if form.is_valid():
+			category = LibraryCategory(
+				name = form.cleaned_data['name'], 
+				library = library
+			)
+			category.save()
+
+			return redirect(reverse('library-category/edit', args=[library.id, category.id]) + "?status=created")
+	else:
+		form = LibraryCategoryForm()
+
+	return render(request, 'book/book/add.html', {
+		'form': form,
+		'library': library,
+		'category': category,
+	})
+
+
+@login_required
+def book_archive(request, library_id, category_id):
+	library = get_object_or_404(Library, pk=library_id)
+
+	if library.user != request.user:
+		return redirect('library/archive')
+
+	category = get_object_or_404(LibraryCategory, pk=category_id)
+
+	return render(request, 'book/book/index.html', {
+		'library': library,
+		'category': category,
+	})
+
+
+@login_required
+def edit_category(request, library_id, category_id):
+	library = get_object_or_404(Library, pk=library_id)
+
+	if library.user != request.user:
+		return redirect('library/archive')
+
+	category = get_object_or_404(LibraryCategory, pk=category_id)
+
+	if request.method == "POST":
+		form = LibraryCategoryForm(request.POST)
+
+		if form.is_valid():
+			category.name = form.cleaned_data['name']
+			category.save()
+
+			return redirect(reverse('library-category/edit', args=[library_id, category_id]) + "?status=updated")
+
+	else:
+		form = LibraryCategoryForm(initial={
+			'name': category.name
+		})
+
+	return render(request, 'book/category/edit.html', {
+		'form': form,
+		'library': library
+	})
+
+
+@login_required
+def add_category(request, library_id):
+	library = get_object_or_404(Library, pk=library_id)
+
+	if library.user != request.user:
+		return redirect('library/archive')
+
+	if request.method == "POST":
+		form = LibraryCategoryForm(request.POST)
+
+		if form.is_valid():
+			category = LibraryCategory(
+				name = form.cleaned_data['name'], 
+				library = library
+			)
+			category.save()
+
+			return redirect(reverse('library-category/edit', args=[library.id, category.id]) + "?status=created")
+	else:
+		form = LibraryCategoryForm()
+
+	return render(request, 'book/category/add.html', {
+		'form': form,
+		'library': library,
+	})
+
+
+@login_required
+def archive_category(request, library_id):
+	library = get_object_or_404(Library, pk=library_id)
+
+	if library.user != request.user:
+		return redirect('library/archive')
+
+	return render(request, 'book/category/index.html', {
+		'library': library
+	})
+
 
 
 @login_required

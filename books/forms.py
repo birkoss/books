@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from .models import LibraryTemplate
 
+
 class LibraryForm(forms.Form):
 	error_css_class = "alert alert-danger"
 
@@ -18,3 +19,9 @@ class LibraryForm(forms.Form):
 			raise ValidationError(_('Validation Error !!'))
 
 		return data
+
+
+class LibraryCategoryForm(forms.Form):
+	error_css_class = "alert alert-danger"
+
+	name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
