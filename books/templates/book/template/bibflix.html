@@ -1,4 +1,5 @@
 {% load static %}
+{% load imagekit %}
 <html>
 <head>
 	<meta charset="utf-8" />
@@ -39,7 +40,9 @@
 					<h1 id="home">{{ category.name }}</h1>
 					<div class="box">
 						{% for book in category.book_set.all %}
-							<a target="_blank" href="#"><img src="books/telemaque.jpg" alt="{{ book.name }}"></a>
+							{% if book.cover %}
+								<a target="_blank" href="#">{% thumbnail '400x550' book.cover %}</a>
+							{% endif %}
 						{% endfor %}
 					</div>
 				</div>

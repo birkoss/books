@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404, render, redirect, reverse
 
 from .forms import BookForm, LibraryForm, LibraryCategoryForm
@@ -8,6 +9,8 @@ from .models import Book, Library, LibraryCategory
 
 def library_single(request, library_slug):
 	library = get_object_or_404(Library, slug=library_slug)
+
+	# @TODO Verify that this library is active
 	
 	return render(request, 'book/single.html', {
 		'library': library
@@ -29,6 +32,26 @@ def edit_book(request, library_id, category_id, book_id):
 		form = BookForm(request.POST)
 
 		if form.is_valid():
+			print( request.FILES.getlist('cover') )
+			# Check if there are posted images.
+			if request.FILES.getlist('cover'):	
+				# Define the location where we will be uploading our file(s)
+				# We'll use the format ecommerce/media/products/PRODUCT_ID to group images by product.
+				book_medias_path = 'books/' + str(book.id)
+				
+				# Loop through each posted image file
+				for post_file in request.FILES.getlist('cover'):
+					# Create an instance of FileSystemStorage class using a custom upload location as indicated in the parameter.
+					fs = FileSystemStorage(location="medias/" + book_medias_path)
+					# Save the file(s) to the specified location
+					filename = fs.save(post_file.name, post_file)
+					# Build the URL location of our image. 
+					uploaded_file_url = book_medias_path + '/' + filename
+
+					# Save the image to our database.
+
+					book.cover = uploaded_file_url
+
 			book.name = form.cleaned_data['name']
 			book.save()
 
@@ -42,6 +65,7 @@ def edit_book(request, library_id, category_id, book_id):
 		'form': form,
 		'library': library,
 		'category': category,
+		'book': book
 	})
 
 

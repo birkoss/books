@@ -41,3 +41,12 @@ body {
     color: white;
     background-color: #3b5998;
 }
+
+.book-cover {
+    align-self: center;
+}
+
+.book-cover > img {
+    max-width: 100%;
+    height: auto;
+}

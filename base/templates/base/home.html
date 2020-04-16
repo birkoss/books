@@ -25,8 +25,9 @@
 					<td>{% if library.active %}<span class="badge badge-success">publiée</span>{% else %}<span class="badge badge-warning">non-publiée</span>{% endif %}</td>
 					<td><a href="{% url 'library-category/archive' library.id %}">{{ library.librarycategory_set.all.count }} catégorie(s)</a></td>
 					<td>
-						<a href="{% url 'library/edit' library.id %}">Modifier</a> &nbsp;&nbsp;
-						<a href="{% url 'library/single' library.slug %}" target="_blank">Voir</a>
+						<a href="{% url 'library/edit' library.id %}">Modifier</a> &nbsp;-&nbsp;
+						<a href="{% url 'library/single' library.slug %}" target="_blank">Voir</a> &nbsp;-&nbsp;
+						<a href="{% url 'library/single' library.slug %}" target="_blank">Publier</a>
 					</td>
 				</tr>
 				{% endfor %}

@@ -41,7 +41,7 @@ class LibraryCategory(models.Model):
 	order = models.IntegerField(default=0, null=True)
 
 	def __str__(self):
-		return self.name + " - " + self.library.name
+		return self.name# + " - " + self.library.name
 
 	def save(self, *args, **kwargs):
 		if self.order == 0:
@@ -56,4 +56,5 @@ class LibraryCategory(models.Model):
 class Book(models.Model):
 	name = models.CharField(max_length=200, default='')
 	category = models.ForeignKey(LibraryCategory, blank=True, null=True, on_delete=models.PROTECT)
+	cover = models.ImageField(null=True)
 

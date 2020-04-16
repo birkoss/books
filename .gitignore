@@ -8,5 +8,4 @@ passenger_wsgi.py
 project/config.py
 stderr.log
 
-media/
-medias/
+/medias/

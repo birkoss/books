@@ -31,3 +31,4 @@ class BookForm(forms.Form):
 	error_css_class = "alert alert-danger"
 
 	name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+	cover = forms.CharField(widget=forms.FileInput(attrs={'class':'form-control image-input', 'accept': 'image/*', 'multiple': 'multiple'}), required=False)
