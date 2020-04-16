@@ -1,4 +1,5 @@
 import os
+import os.path
 import shutil
 
 from django.contrib.auth.decorators import login_required
@@ -34,6 +35,13 @@ def edit_book(request, library_id, category_id, book_id):
 	category = get_object_or_404(LibraryCategory, pk=category_id)
 	
 	book = get_object_or_404(Book, pk=book_id)
+
+	book_cover_image = ""
+	if book.cover:
+		book_cover_filename = MEDIA_ROOT + "/" + book.cover.url.replace(MEDIA_URL, "")
+		if os.path.isfile(book_cover_filename):
+			book_cover_image = book.cover
+
 
 	if request.method == "POST":
 		form = BookForm(request.POST)
@@ -79,7 +87,8 @@ def edit_book(request, library_id, category_id, book_id):
 		'form': form,
 		'library': library,
 		'category': category,
-		'book': book
+		'book': book,
+		'book_cover_image': book_cover_image
 	})
 
 

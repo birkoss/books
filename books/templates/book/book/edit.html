@@ -14,13 +14,13 @@
 
 	<div class="row">
 
-		<div class="col-3 book-cover">
-			{% if book.cover %}
-				{% thumbnail '200x300' book.cover %}
-			{% endif %}
-		</div>
+		{% if book_cover_image %}
+			<div class="col-3 book-cover">
+				{% thumbnail '200x300' book_cover_image %}
+			</div>
+		{% endif %}
 
-		<div class="col-9">
+		<div class="{% if book_cover_image %}col-9{% else %}col-12{% endif %}">
 			<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
 				<h1 class="h2">Modifier un livre existant</h1>
 				<a href="{% url 'library-category-book/archive' library.id category.id %}" class="btn btn-outline-secondary btn-sm">Annuler</a>
