@@ -14,8 +14,9 @@ urlpatterns = [
     path('', base_views.home, name='home'),
     path('', base_views.home, name='library/archive'),
     path('library/<str:library_slug>/', books_views.library_single, name='library/single'),
+    
     path('libraries/edit/<str:library_id>/categories/edit/<str:category_id>/books/edit/<str:book_id>/', books_views.edit_book, name='library-category-book/edit'),
-    path('libraries/edit/<str:library_id>/categories/edit/<str:category_id>/books/add/', books_views.add_book, name='library-category-book/add'),
+    path('libraries/edit/<str:library_id>/categories/edit/<str:category_id>/books/add/', books_views.edit_book, name='library-category-book/add'),
     path('libraries/edit/<str:library_id>/categories/edit/<str:category_id>/books/', books_views.book_archive, name='library-category-book/archive'),
     
     path('libraries/edit/<str:library_id>/categories/edit/<str:category_id>/', books_views.edit_category, name='library-category/edit'),

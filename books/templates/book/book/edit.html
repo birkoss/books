@@ -22,8 +22,7 @@
 
 		<div class="{% if book_cover_image %}col-9{% else %}col-12{% endif %}">
 			<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-				<h1 class="h2">Modifier un livre existant</h1>
-				<a href="{% url 'library-category-book/archive' library.id category.id %}" class="btn btn-outline-secondary btn-sm">Annuler</a>
+				<h1 class="h2">{{ title }}</h1>
 			</div>
 
 			<form method="post" enctype="multipart/form-data">
@@ -31,7 +30,10 @@
 				<table class="table">
 					{{ form }}
 				</table>
-				<input class="btn btn-primary" type="submit" value="Modifier" />
+				<div class="actions">
+					<input class="btn btn-primary" type="submit" value="{{ button }}" />
+					<a href="{% url 'library-category-book/archive' library.id category.id %}" class="btn btn-outline-secondary">Annuler</a>
+				</div>
 			</form>
 		</div>
 
