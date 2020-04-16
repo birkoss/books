@@ -49,6 +49,10 @@ def library_single(request, library_slug):
 
 
 @login_required
+# @TODO : Combine edit and add
+# @TODO : Validate url starting with http.
+# @TODO : Allow NO url for quick save
+# @TODO : BTN Save and Stay, Save and Back
 def edit_book(request, library_id, category_id, book_id):
 	library = get_object_or_404(Library, pk=library_id)
 
@@ -112,6 +116,7 @@ def edit_book(request, library_id, category_id, book_id):
 
 
 @login_required
+# @TODO : Allow image upload in the ADD
 def add_book(request, library_id, category_id):
 	library = get_object_or_404(Library, pk=library_id)
 

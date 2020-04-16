@@ -1,3 +1,4 @@
+from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
@@ -10,6 +11,7 @@ from django.conf import settings
 
 
 urlpatterns = [
+    path('', base_views.home, name='home'),
     path('', base_views.home, name='library/archive'),
     path('library/<str:library_slug>/', books_views.library_single, name='library/single'),
     path('libraries/add/', books_views.add_library, name='library/add'),
@@ -20,5 +22,9 @@ urlpatterns = [
     path('libraries/edit/<str:library_id>/categories/add/', books_views.add_category, name='library-category/add'),
     path('libraries/edit/<str:library_id>/categories/', books_views.archive_category, name='library-category/archive'),
     path('libraries/edit/<str:library_id>/', books_views.edit_library, name='library/edit'),
+    
     path('admin/', admin.site.urls),
+    path('logout/', base_views.logout_user, name='logout'),
+
+    url(r'^oauth/', include('social_django.urls', namespace='social')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
