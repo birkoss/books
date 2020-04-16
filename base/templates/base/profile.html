@@ -1,0 +1,46 @@
+{% extends 'base/base.html' %}
+
+{% block page_title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-lg-5">
+			<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+				<h1 class="h2">Profile</h1>
+			</div>
+			
+			<div class="card shadow-lg border-0 rounded-lg">
+				<div class="card-body">
+					<h3 class="small mb-3 text-muted social-media">Google</h3>
+					{% if google_login %}
+						<p>Connected as <strong>{{ google_login }}</strong></p>
+						{% if can_disconnect %}
+							<form method="post" action="{% url 'social:disconnect' 'google-oauth2' %}">
+								{% csrf_token %}
+								<button class="btn btn-primary" type="submit">Disconnect from Google</button>
+							</form>
+						{% endif %}
+					{% else %}
+						<a class="btn btn-primary" href="{% url 'social:begin' 'google-oauth2' %}">Connect to Google</a>
+					{% endif %}
+
+					<h3 class="small mb-3 text-muted social-media">Facebook</h3>
+					{% if facebook_login %}
+						<p>Connected</p>
+						{% if can_disconnect %}
+							<form method="post" action="{% url 'social:disconnect' 'facebook' %}">
+								{% csrf_token %}
+								<button class="btn btn-primary" type="submit">Disconnect from Facebook</button>
+							</form>
+						{% endif %}
+					{% else %}
+						<a class="btn btn-primary" href="{% url 'social:begin' 'facebook' %}">Connect to Facebook</a>
+					{% endif %}
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

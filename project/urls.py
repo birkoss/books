@@ -24,7 +24,8 @@ urlpatterns = [
     path('libraries/edit/<str:library_id>/', books_views.edit_library, name='library/edit'),
     
     path('admin/', admin.site.urls),
-    path('logout/', base_views.logout_user, name='logout'),
+    path('logout/', base_views.user_logout, name='logout'),
+    path('profile/', base_views.user_profile, name='profile'),
 
     url(r'^oauth/', include('social_django.urls', namespace='social')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
