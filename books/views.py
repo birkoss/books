@@ -230,52 +230,39 @@ def archive_category(request, library_id):
 	})
 
 
-
 @login_required
-def edit_library(request, library_id):
-	library = get_object_or_404(Library, pk=library_id)
+def edit_library(request, library_id=None):
+	library = None
 
-	if library.user != request.user:
-		return redirect('library/archive')
+	if library_id:
+		library = get_object_or_404(Library, pk=library_id)
+
+		if library.user != request.user:
+			return redirect('library/archive')
 
 	if request.method == "POST":
 		form = LibraryForm(request.POST)
 
 		if form.is_valid():
+			if library_id is None:
+				library = Library(user = request.user)
+
 			library.name = form.cleaned_data['name']
 			library.template = form.cleaned_data['template']
 			library.save()
 
-			return redirect(reverse('library/edit', args=[library_id]) + "?status=updated")
+			return redirect(reverse('library/edit', args=[library.id]) + "?status=" + ("updated" if library_id else "created"))
 
-	else:
+	elif library_id:
 		form = LibraryForm(initial={
 			'name': library.name,
 			'template': library.template,
 		})
-
-	return render(request, 'book/edit.html', {
-		'form': form
-	})
-
-
-@login_required
-def add_library(request):
-	if request.method == "POST":
-		form = LibraryForm(request.POST)
-
-		if form.is_valid():
-			library = Library(
-				name = form.cleaned_data['name'], 
-				template = form.cleaned_data['template'], 
-				user = request.user
-			)
-			library.save()
-
-			return redirect(reverse('library/edit', args=[library.id]) + "?status=created")
 	else:
 		form = LibraryForm()
 
-	return render(request, 'book/add.html', {
-		'form': form
+	return render(request, 'book/library/edit.html', {
+		'form': form,
+		'button': ('Modifier' if library_id else 'Ajouter'),
+		'title': ('Modifier une bibliothèque existante' if library_id else 'Ajouter une nouvelle bibliothèque'),
 	})
