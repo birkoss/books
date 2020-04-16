@@ -49,9 +49,6 @@ def library_single(request, library_slug):
 
 
 @login_required
-# @TODO : Combine edit and add
-# @TODO : Validate url starting with http.
-# @TODO : Allow NO url for quick save
 # @TODO : BTN Save and Stay, Save and Back
 def edit_book(request, library_id, category_id, book_id=None):
 	library = get_object_or_404(Library, pk=library_id)
@@ -121,40 +118,6 @@ def edit_book(request, library_id, category_id, book_id=None):
 		'book_cover_image': book_cover_image,
 		'button': ('Modifier' if book_id else 'Ajouter'),
 		'title': ('Modifier un livre existant' if book_id else 'Ajouter un nouveau livre'),
-	})
-
-
-@login_required
-# @TODO : Allow image upload in the ADD
-def add_book(request, library_id, category_id):
-	library = get_object_or_404(Library, pk=library_id)
-
-	if library.user != request.user:
-		return redirect('library/archive')
-
-	category = get_object_or_404(LibraryCategory, pk=category_id)
-
-	if request.method == "POST":
-		form = BookForm(request.POST)
-
-		if form.is_valid():
-			book = Book(
-				name = form.cleaned_data['name'], 
-				url = form.cleaned_data['url'], 
-				category = category
-			)
-			book.save()
-
-			return redirect(reverse('library-category-book/edit', args=[library.id, category.id, book.id]) + "?status=" + ("updated" if book_id else "created"))
-	else:
-		form = BookForm()
-
-	return render(request, 'book/book/add.html', {
-		'form': form,
-		'library': library,
-		'category': category,
-		'button': ('Modifier' if category_id else 'Ajouter'),
-		'title': ('Modifier un livre existant' if category_id else 'Ajouter un nouveau livre'),
 	})
 
 
