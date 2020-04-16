@@ -163,58 +163,40 @@ def book_archive(request, library_id, category_id):
 
 
 @login_required
-def edit_category(request, library_id, category_id):
+def edit_category(request, library_id, category_id=None):
 	library = get_object_or_404(Library, pk=library_id)
 
 	if library.user != request.user:
 		return redirect('library/archive')
 
-	category = get_object_or_404(LibraryCategory, pk=category_id)
+	category = None
+	if category_id:
+		category = get_object_or_404(LibraryCategory, pk=category_id)
 
 	if request.method == "POST":
 		form = LibraryCategoryForm(request.POST)
 
 		if form.is_valid():
+			if not category_id:
+				category = LibraryCategory(library=library)
+
 			category.name = form.cleaned_data['name']
 			category.save()
 
-			return redirect(reverse('library-category/edit', args=[library_id, category_id]) + "?status=updated")
+			return redirect(reverse('library-category/edit', args=[library.id, category.id]) + "?status=" + ("updated" if category_id else "created"))
 
-	else:
+	elif category_id:
 		form = LibraryCategoryForm(initial={
 			'name': category.name
 		})
-
-	return render(request, 'book/category/edit.html', {
-		'form': form,
-		'library': library
-	})
-
-
-@login_required
-def add_category(request, library_id):
-	library = get_object_or_404(Library, pk=library_id)
-
-	if library.user != request.user:
-		return redirect('library/archive')
-
-	if request.method == "POST":
-		form = LibraryCategoryForm(request.POST)
-
-		if form.is_valid():
-			category = LibraryCategory(
-				name = form.cleaned_data['name'], 
-				library = library
-			)
-			category.save()
-
-			return redirect(reverse('library-category/edit', args=[library.id, category.id]) + "?status=created")
 	else:
 		form = LibraryCategoryForm()
 
-	return render(request, 'book/category/add.html', {
+	return render(request, 'book/category/edit.html', {
 		'form': form,
 		'library': library,
+		'button': ('Modifier' if category_id else 'Ajouter'),
+		'title': ('Modifier une bibliothèque existante' if category_id else 'Ajouter une nouvelle bibliothèque'),
 	})
 
 
