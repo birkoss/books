@@ -1,10 +1,10 @@
 jQuery(document).ready(function() {
 
-	jQuery(".list-categories").sortable({
+	jQuery(".list-sortable").sortable({
 		placeholder : "sortable-element-highlight",
 		update: function(event, ui) {
 			var items = new Array();
-			jQuery('.list-categories tr').each(function() {
+			jQuery('.list-sortable tr').each(function() {
 				items.push(jQuery(this).data("category-id"));
 			});
 			jQuery.ajax({
