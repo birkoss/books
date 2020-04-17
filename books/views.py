@@ -27,6 +27,7 @@ def library_single(request, library_slug):
 
 	for single_category in library.librarycategory_set.all():
 		category = {
+			'id': single_category.id,
 			'name': single_category.name,
 			'books': []
 		}
@@ -50,7 +51,6 @@ def library_single(request, library_slug):
 
 
 @login_required
-# @TODO : BTN Save and Stay, Save and Back
 def edit_book(request, library_id, category_id, book_id=None):
 	library = get_object_or_404(Library, pk=library_id)
 
