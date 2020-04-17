@@ -32,10 +32,10 @@
 			</thead>
 			<tbody{% if library.librarycategory_set.all|length > 1 %} class="list-sortable"{% endif %}">
 				{% for category in library.librarycategory_set.all %}
-				<tr data-category-id="{{ category.id }}">
+				<tr data-item-id="{{ category.id }}">
 					{% if library.librarycategory_set.all|length > 1 %}
 						<td class="sortable-icon"><i class="fas fa-sort"></i></td>
-						{% endif %}
+					{% endif %}
 					<td>{{ category.name }}</td>
 					<td>{% if category.active %}<span class="badge badge-success">publiée</span>{% else %}<span class="badge badge-warning">non-publiée</span>{% endif %}</td>
 					<td><a href="{% url 'library-category-book/archive' library.id category.id %}">{{ category.book_set.all.count }} livre(s)</a></td>

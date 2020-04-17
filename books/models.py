@@ -61,4 +61,16 @@ class Book(models.Model):
 	url = models.CharField(max_length=300, default='')
 	category = models.ForeignKey(LibraryCategory, blank=True, null=True, on_delete=models.PROTECT)
 	cover = models.ImageField(null=True)
+	order = models.IntegerField(default=0, null=True)
 
+	class Meta:
+		ordering = ('order', )
+
+	def save(self, *args, **kwargs):
+		if self.order == 0:
+			 book = Book.objects.filter(category=self.category).order_by("-order").first()
+			 if book is not None:
+			 	self.order = book.order + 1
+			 else:
+			 	self.order = 1
+		super().save(args, kwargs)

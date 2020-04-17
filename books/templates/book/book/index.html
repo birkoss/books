@@ -21,14 +21,20 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
+					{% if category.book_set.all|length > 1 %}
+						<th scope="col">&nbsp;</th>
+					{% endif %}
 					<th scope="col">Nom</th>
 					<th scope="col">Status</th>
 					<th scope="col">Actions</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody{% if category.book_set.all|length > 1 %} class="list-sortable"{% endif %}">
 				{% for book in category.book_set.all %}
-				<tr>
+				<tr data-item-id="{{ book.id }}">
+					{% if category.book_set.all|length > 1 %}
+						<td class="sortable-icon"><i class="fas fa-sort"></i></td>
+					{% endif %}
 					<td>{{ book.name }}</td>
 					<td>{% if book.active %}<span class="badge badge-success">publiée</span>{% else %}<span class="badge badge-warning">non-publiée</span>{% endif %}</td>
 					<td>

@@ -131,6 +131,26 @@ def book_archive(request, library_id, category_id):
 
 	category = get_object_or_404(LibraryCategory, pk=category_id)
 
+	# To change the categories order using jQuery Sortable
+	if request.method == "POST":
+		response = {
+			"status": "error"
+		}
+
+		books = request.POST.getlist("items[]", [])
+		if books:
+			new_order = 1
+			for book_id in books:
+				book = Book.objects.filter(category=category, pk=book_id).first()
+				if book:
+					book.order = new_order
+					book.save()
+					new_order += 1
+			if new_order != 1:
+				response['status'] = "ok"	
+
+		return JsonResponse(response)
+
 	return render(request, 'book/book/index.html', {
 		'library': library,
 		'category': category,
