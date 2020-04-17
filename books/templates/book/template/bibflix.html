@@ -41,7 +41,7 @@
 					<div class="box">
 						{% for book in category.books %}
 							{% if book.cover_image %}
-								<a target="_blank" href="{{ book.url }}">{% thumbnail '400x550' book.cover_image %}</a>
+								<a target="_blank" href="{{ book.url }}">{% thumbnail '375x550' book.cover_image %}</a>
 							{% endif %}
 						{% endfor %}
 					</div>

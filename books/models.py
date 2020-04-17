@@ -40,6 +40,9 @@ class LibraryCategory(models.Model):
 	active = models.BooleanField(default=False)
 	order = models.IntegerField(default=0, null=True)
 
+	class Meta:
+		ordering = ('order', )
+
 	def __str__(self):
 		return self.name# + " - " + self.library.name
 

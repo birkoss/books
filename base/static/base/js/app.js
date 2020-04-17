@@ -1,14 +1,24 @@
 jQuery(document).ready(function() {
-	var path = window.location.href;
 
-	jQuery("#layoutSidenav_nav .sb-sidenav a.nav-link").each(function() {
-		if (this.href === path) {
-			jQUery(this).addClass("active");
+	jQuery(".list-categories").sortable({
+		placeholder : "sortable-element-highlight",
+		update: function(event, ui) {
+			var items = new Array();
+			jQuery('.list-categories tr').each(function() {
+				items.push(jQuery(this).data("category-id"));
+			});
+			jQuery.ajax({
+				url: window.location.href,
+				method: "POST",
+				data:{
+					"csrfmiddlewaretoken": AJAX_CSRF_TOKEN,
+					"items": items
+				},
+				success: function(data) {
+					console.log(data);
+				}
+			});
 		}
 	});
 
-	jQuery("#sidebarToggle").on("click", function(e) {
-		e.preventDefault();
-		jQuery("body").toggleClass("sb-sidenav-toggled");
-	});
 });

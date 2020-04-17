@@ -21,15 +21,17 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
+					<th scope="col">&nbsp;</th>
 					<th scope="col">Nom</th>
 					<th scope="col">Status</th>
 					<th scope="col">Livres</th>
 					<th scope="col">Actions</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody class="list-categories">
 				{% for category in library.librarycategory_set.all %}
-				<tr>
+				<tr data-category-id="{{ category.id }}">
+					<td class="sortable-icon"><i class="fas fa-sort"></i></td>
 					<td>{{ category.name }}</td>
 					<td>{% if category.active %}<span class="badge badge-success">publiée</span>{% else %}<span class="badge badge-warning">non-publiée</span>{% endif %}</td>
 					<td><a href="{% url 'library-category-book/archive' library.id category.id %}">{{ category.book_set.all.count }} livre(s)</a></td>
@@ -45,7 +47,6 @@
 			Vous n'avez aucune catégorie dans cette bibliothèque. Créer une <a href="{% url 'library-category/add' library.id %}">première catégorie</a>.
 		</div>
 	{% endif %}
-
 
 </div>
 

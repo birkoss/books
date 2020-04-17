@@ -5,6 +5,7 @@ import shutil
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.files.storage import FileSystemStorage
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect, reverse
 from django.utils.text import slugify
 
@@ -177,6 +178,26 @@ def edit_category(request, library_id, category_id=None):
 @login_required
 def archive_category(request, library_id):
 	library = get_object_or_404(Library, pk=library_id)
+
+	# To change the categories order using jQuery Sortable
+	if request.method == "POST":
+		response = {
+			"status": "error"
+		}
+
+		categories = request.POST.getlist("items[]", [])
+		if categories:
+			new_order = 1
+			for category_id in categories:
+				category = LibraryCategory.objects.filter(library=library, pk=category_id).first()
+				if category:
+					category.order = new_order
+					category.save()
+					new_order += 1
+			if new_order != 1:
+				response['status'] = "ok"	
+
+		return JsonResponse(response)
 
 	if library.user != request.user:
 		return redirect('library/archive')

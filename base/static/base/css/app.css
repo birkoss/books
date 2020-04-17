@@ -73,3 +73,15 @@ body {
 .actions > .btn {
     margin-left: 10px;
 }
+
+.sortable-element-highlight {
+    padding: 24px;
+    background-color: #ffffcc !important;
+    border: 1px dotted #ccc;
+    cursor: move;
+    margin-top: 12px;
+}
+
+.sortable-icon {
+    cursor: pointer;
+}

@@ -51,8 +51,15 @@
 
 		{% block base %}{% endblock %}
 
+		{% if user.is_authenticated %}
+			<script type="text/javascript">
+				var AJAX_CSRF_TOKEN = "{{ csrf_token }}";
+			</script>
+		{% endif %}
+
 		{% compress js %}
 			<script src="{% static 'base/js/jquery.js' %}"></script>
+			<script src="{% static 'base/js/jquery-ui.min.js' %}"></script>
 			<script src="{% static 'base/js/bootstrap.js' %}"></script>
 			<script src="{% static 'base/js/font-awesome.js' %}"></script>
 			<script src="{% static 'base/js/app.js' %}"></script>
